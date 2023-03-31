@@ -1,0 +1,1 @@
+# Incorporating-Globally-Optimal-Direction-Fields-with-Index-Constraints-into-Trivial-Connections
