@@ -1,3 +1,5 @@
+implementing https://www.cs.cmu.edu/~kmcrane/Projects/TrivialConnections/ with different energies.
+
 # Incorporating-Globally-Optimal-Direction-Fields-with-Index-Constraints-into-Trivial-Connections
 
 The goal of this project is to learn and implement a method for constructing smooth vector fields on 3D surfaces with singularities located at "important points". The resulting vector fields will have applications in a variety of areas, such as quadrilateral re-meshing, anisotropic shading, and hatching shading. To achieve this goal, the team will learn and implement the following concepts and skills:
