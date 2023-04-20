@@ -167,6 +167,7 @@ namespace tcods
 
          std::vector<double> generatorIndices; // target holonomy around generators divided by 2pi
          double fieldAngle;                    // initial angle for global direction field
+         int n_rings;
 
       protected:
          void indexElements( void );                // assigns a unique ID to each mesh element

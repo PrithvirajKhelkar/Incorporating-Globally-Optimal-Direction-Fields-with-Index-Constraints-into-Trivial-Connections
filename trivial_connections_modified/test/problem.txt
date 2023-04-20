@@ -6,3 +6,4 @@ vertex 11275 1.5
 vertex 12385 0.5
 vertex 13192 1
 angle 0
+n_rings 3

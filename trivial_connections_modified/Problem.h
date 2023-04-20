@@ -47,6 +47,8 @@ namespace tcods
 
          typedef std::pair<int,double> Generator;
          std::vector<Generator> generators;
+
+         int n_rings;
    };
 }
 

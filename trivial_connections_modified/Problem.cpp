@@ -59,6 +59,8 @@ namespace tcods
       }
    
       mesh.fieldAngle = fieldAngle;
+
+      mesh.n_rings = n_rings;
    
       mesh.computeTrivialConnection();
    
@@ -102,6 +104,10 @@ namespace tcods
          else if( token == "angle" )
          {
             line >> fieldAngle;
+         }
+         else if( token == "n_rings")
+         {
+            line >> n_rings;
          }
       }
    }

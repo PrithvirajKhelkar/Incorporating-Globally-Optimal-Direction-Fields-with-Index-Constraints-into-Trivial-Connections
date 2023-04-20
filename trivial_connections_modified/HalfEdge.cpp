@@ -982,7 +982,7 @@ namespace tcods
       }
       else if( extension == "objx" )
       {
-         MeshIO::writeOBJX( out, *this );
+         MeshIO::writeOBJX( out, *this, n_rings );
       }
       else if( extension == "jvx" )
       {

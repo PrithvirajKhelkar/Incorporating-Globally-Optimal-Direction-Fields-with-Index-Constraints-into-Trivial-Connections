@@ -11,6 +11,7 @@
 #include <fstream>
 #include <cmath>
 #include <set>
+#include <queue>
 
 using namespace std;
 
@@ -101,7 +102,7 @@ namespace tcods
       }
    }
 
-   void MeshIO :: writeOBJX( ostream& out, const Mesh& mesh )
+   void MeshIO :: writeOBJX( ostream& out, const Mesh& mesh, int n_rings )
    {
       out.precision( 10 );
 
@@ -109,6 +110,33 @@ namespace tcods
       map< VertexCIter, int > vertexIndex;
       const vector<Vertex>& vertices( mesh.vertices );
       const vector<Face>& faces( mesh.faces );
+
+      map< int, int> depthFromSingularity;
+      set<int>n_rings_vertices;
+      for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
+      {
+         if (vit->k == 0.0) continue;
+         HalfEdgeIter he = vit->out; // boundary conditions not checked
+         depthFromSingularity[vit->index] = 1;
+         queue<VertexIter>curqueue;
+         curqueue.push(vit);
+         while(!queue.empty())
+         {
+            vit = queue.pop();
+            he = vit->out->next;
+            VertexIter initialVertexIter = he->from;
+            do{
+               VertexIter curVertexIter = he->from;
+               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
+               {
+                  depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
+                  queue.push(curVertexIter);
+                  n_rings_vertices.insert(curVertexIter->index);
+               }
+               he = he->next->flip->next;
+            }while(he->from != initialVertexIter);
+         }
+      }
 
       for( VertexCIter i = vertices.begin(); i != vertices.end(); i++ )
       {
@@ -138,7 +166,14 @@ namespace tcods
          while( he != i->out );
          u.normalize();
          
-         out << "vf " << u.x << " " << u.y << " " << u.z << endl;
+         if (n_rings_vertices.contains(i->index) || mesh.n_rings == 0)
+         {
+            out << "vf " << u.x << " " << u.y << " " << u.z << endl;
+         }
+         else
+         {
+            out << "vf " << 0.0 << " " << 0.0 << " " << 0.0 << endl;
+         }
       }
 
       for( FaceCIter i = faces.begin(); i != faces.end(); i++ )
