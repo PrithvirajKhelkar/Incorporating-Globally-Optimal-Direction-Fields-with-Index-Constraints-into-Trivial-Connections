@@ -102,20 +102,19 @@ namespace tcods
       }
    }
 
-   void MeshIO :: writeOBJX( ostream& out, const Mesh& mesh, int n_rings )
+   void MeshIO :: writeOBJX( ostream& out, Mesh& mesh, int n_rings )
    {
       out.precision( 10 );
 
       int currentIndex = 1;
-      map< VertexCIter, int > vertexIndex;
-      const vector<Vertex>& vertices( mesh.vertices );
-      const vector<Face>& faces( mesh.faces );
+      map< VertexIter, int > vertexIndex;
+      vector<Vertex>& vertices( mesh.vertices );
+      vector<Face>& faces( mesh.faces );
 
       map< int, int> depthFromSingularity;
       set<int>n_rings_vertices;
-      for( VertexCIter vcit = vertices.begin(); vcit != vertices.end(); vcit++ )
+      for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
       {
-         VertexIter vit = vcit;
          if (vit->k == 0.0) continue;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
          depthFromSingularity[vit->index] = 1;
@@ -140,7 +139,7 @@ namespace tcods
          }
       }
 
-      for( VertexCIter i = vertices.begin(); i != vertices.end(); i++ )
+      for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
       {
          out << "v " << i->position[0] << " "
                      << i->position[1] << " "
@@ -150,7 +149,7 @@ namespace tcods
          currentIndex++;
       }
 
-      for( VertexCIter i = vertices.begin(); i != vertices.end(); i++ )
+      for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
       {
          Vector u( 0., 0., 0. );
          HalfEdgeIter he = i->out;
