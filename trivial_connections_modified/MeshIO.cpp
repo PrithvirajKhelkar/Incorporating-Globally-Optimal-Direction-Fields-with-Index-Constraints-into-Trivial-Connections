@@ -113,8 +113,9 @@ namespace tcods
 
       map< int, int> depthFromSingularity;
       set<int>n_rings_vertices;
-      for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
+      for( VertexCIter vcit = vertices.begin(); vcit != vertices.end(); vcit++ )
       {
+         VertexIter vit = vcit;
          if (vit->k == 0.0) continue;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
          depthFromSingularity[vit->index] = 1;
