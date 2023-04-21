@@ -166,7 +166,7 @@ namespace tcods
          while( he != i->out );
          u.normalize();
          
-         if (n_rings_vertices.contains(i->index) || mesh.n_rings == 0)
+         if (n_rings_vertices.count(i->index) != 0 || mesh.n_rings == 0)
          {
             out << "vf " << u.x << " " << u.y << " " << u.z << endl;
          }
