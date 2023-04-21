@@ -120,9 +120,9 @@ namespace tcods
          depthFromSingularity[vit->index] = 1;
          queue<VertexIter>curqueue;
          curqueue.push(vit);
-         while(!queue.empty())
+         while(!curqueue.empty())
          {
-            vit = queue.pop();
+            vit = curqueue.pop();
             he = vit->out->next;
             VertexIter initialVertexIter = he->from;
             do{
@@ -130,7 +130,7 @@ namespace tcods
                if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
                {
                   depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
-                  queue.push(curVertexIter);
+                  curqueue.push(curVertexIter);
                   n_rings_vertices.insert(curVertexIter->index);
                }
                he = he->next->flip->next;
