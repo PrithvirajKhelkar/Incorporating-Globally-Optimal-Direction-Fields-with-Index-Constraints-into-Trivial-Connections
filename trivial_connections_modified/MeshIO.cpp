@@ -122,7 +122,7 @@ namespace tcods
          curqueue.push(vit);
          while(!curqueue.empty())
          {
-            vit = curqueue.top();
+            vit = curqueue.front();
             curqueue.pop();
             he = vit->out->next;
             VertexIter initialVertexIter = he->from;
