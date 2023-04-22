@@ -256,7 +256,7 @@ namespace tcods
             continue;
          }
 
-         out << "# attrs f " << faceIndex[ i ] << " ";
+         out << "#attrs f " << faceIndex[ i ] << " ";
 
          double alpha = i->alpha;
          Vector w( cos(alpha), sin(alpha), 0. );
