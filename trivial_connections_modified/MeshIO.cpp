@@ -286,7 +286,7 @@ namespace tcods
 
          if (n_rings_faces.count(faceIndex[i]) != 0 || mesh.n_rings == 0)
          {
-            out << "#attrs f " << faceIndex[ i ] << " ";
+            out << "#attrs f ";
 
             double alpha = i->alpha;
             Vector w( cos(alpha), sin(alpha), 0. );
@@ -298,7 +298,7 @@ namespace tcods
          }
          else
          {
-            out << "#attrs f " << faceIndex[ i ] << " ";
+            out << "#attrs f ";
 
             out << 0.0 << " " << 0.0 << " " << 0.0;
 
