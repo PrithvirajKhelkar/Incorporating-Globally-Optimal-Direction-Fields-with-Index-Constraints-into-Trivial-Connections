@@ -296,6 +296,14 @@ namespace tcods
 
             out << endl;
          }
+         else
+         {
+            out << "#attrs f " << faceIndex[ i ] << " ";
+
+            out << 0.0 << " " << 0.0 << " " << 0.0;
+
+            out << endl;
+         }
       }
    }
 
