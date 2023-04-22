@@ -978,7 +978,7 @@ namespace tcods
       }
       else if( extension == "eobj" )
       {
-         MeshIO::writeEOBJ( out, *this, n_rings );
+         MeshIO::writeEOBJ( out, *this );
       }
       else if( extension == "objx" )
       {
