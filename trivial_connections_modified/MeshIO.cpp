@@ -116,6 +116,7 @@ namespace tcods
       for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
       {
          if (vit->k == 0.0) continue;
+         VertexIter vit_orig = vit;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
          depthFromSingularity[vit->index] = 1;
          queue<VertexIter>curqueue;
@@ -128,9 +129,12 @@ namespace tcods
             VertexIter initialVertexIter = he->from;
             do{
                VertexIter curVertexIter = he->from;
-               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings && n_rings_vertices.count(vit->index) == 0 && n_rings_vertices.count(curVertexIter->index) == 0)
+               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
                {
                   depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
+                  std::cout << vit_orig->index << ' ' << depthFromSingularity[vit_orig->index] << std::endl;
+                  std::cout << vit->index << ' ' << depthFromSingularity[vit->index] << std::endl;
+                  std::cout << curVertexIter->index << ' ' << depthFromSingularity[curVertexIter->index] << std::endl;
                   curqueue.push(curVertexIter);
                   if (n_rings_vertices.count(curVertexIter->index) == 0)
                      n_rings_vertices.insert(curVertexIter->index);
