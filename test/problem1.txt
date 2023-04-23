@@ -1,0 +1,5 @@
+in test/bunny.obj
+out test/new_solution_3_rings.objx
+vertex 1498 2
+angle 0
+n_rings 5
