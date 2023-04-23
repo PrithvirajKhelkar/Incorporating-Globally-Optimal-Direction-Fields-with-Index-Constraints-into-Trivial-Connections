@@ -111,12 +111,12 @@ namespace tcods
       vector<Vertex>& vertices( mesh.vertices );
       vector<Face>& faces( mesh.faces );
 
-      map< int, int> depthFromSingularity;
       set<int>n_rings_vertices;
       for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
       {
          if (vit->k == 0.0) continue;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
+         map< int, int> depthFromSingularity;
          depthFromSingularity[vit->index] = 1;
          queue<VertexIter>curqueue;
          curqueue.push(vit);
