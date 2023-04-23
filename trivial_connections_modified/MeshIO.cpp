@@ -128,7 +128,7 @@ namespace tcods
             VertexIter initialVertexIter = he->from;
             do{
                VertexIter curVertexIter = he->from;
-               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings && n_rings_vertices.count(vit->index) == 0 && depthFromSingularity[curVertexIter->index] == 0)
+               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings && n_rings_vertices.count(vit->index) == 0 && n_rings_vertices.count(curVertexIter->index) == 0)
                {
                   depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
                   std::cout << vit->index << ' ' << depthFromSingularity[vit->index] << std::endl;
