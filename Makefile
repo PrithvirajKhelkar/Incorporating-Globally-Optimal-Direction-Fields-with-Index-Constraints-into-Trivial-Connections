@@ -9,18 +9,18 @@
 #
 
 # library and include paths for METIS
-METIS_LIB = /usr/lib/x86_64-linux-gnu/libmetis.so
-METIS_INC = /usr/include/metis.h
+METIS_LIB = 
+METIS_INC = 
 
 # library and include paths for SuiteSparse
-SUITESPARSE_LIB = -L/usr/local/lib/
-SUITESPARSE_INC = -I/usr/local/include/
+SUITESPARSE_LIB = 
+SUITESPARSE_INC = 
 
 # library paths and flags for BLAS and LAPACK
-BLAS_INC = /usr/include/x86_64-linux-gnu/cblas.h
-BLAS_LIB = /usr/lib/x86_64-linux-gnu/libblas.so 
-LAPACK_INC = /usr/include/x86_64-linux-gnu/clapack.h
-LAPACK_LIB = /usr/lib/x86_64-linux-gnu/liblapack.so 
+BLAS_INC = 
+BLAS_LIB = 
+LAPACK_INC = 
+LAPACK_LIB = 
 
 # -lblas -llapack
 ################################################################################
