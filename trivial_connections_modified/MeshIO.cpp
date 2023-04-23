@@ -7,7 +7,6 @@
 #include "HalfEdge.h"
 #include <vector>
 #include <map>
-#include <unordered_map>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -112,12 +111,12 @@ namespace tcods
       vector<Vertex>& vertices( mesh.vertices );
       vector<Face>& faces( mesh.faces );
 
+      map< int, int> depthFromSingularity;
       set<int>n_rings_vertices;
       for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
       {
          if (vit->k == 0.0) continue;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
-         unordered_map< int, int> depthFromSingularity;
          depthFromSingularity[vit->index] = 1;
          queue<VertexIter>curqueue;
          curqueue.push(vit);
@@ -133,13 +132,11 @@ namespace tcods
                {
                   depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
                   curqueue.push(curVertexIter);
-                  if (n_rings_vertices.count(curVertexIter->index) == 0)
-                     n_rings_vertices.insert(curVertexIter->index);
+                  n_rings_vertices.insert(curVertexIter->index);
                }
                he = he->next->flip->next;
             }while(he->from != initialVertexIter);
          }
-
       }
 
       for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
@@ -203,17 +200,17 @@ namespace tcods
       }
    }
 
-   void MeshIO :: writeEOBJ( ostream& out, Mesh& mesh, int n_rings )
+   void MeshIO :: writeEOBJ( ostream& out, const Mesh& mesh )
    {
       out.precision( 10 );
 
       int currentIndex = 1;
-      map< VertexIter, int > vertexIndex;
-      map< FaceIter, int > faceIndex;
-      vector<Vertex>& vertices( mesh.vertices );
-      vector<Face>& faces( mesh.faces );
+      map< VertexCIter, int > vertexIndex;
+      map< FaceCIter, int > faceIndex;
+      const vector<Vertex>& vertices( mesh.vertices );
+      const vector<Face>& faces( mesh.faces );
 
-      for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
+      for( VertexCIter i = vertices.begin(); i != vertices.end(); i++ )
       {
          out << "v " << i->position[0] << " "
                      << i->position[1] << " "
@@ -224,7 +221,7 @@ namespace tcods
       }
 
       currentIndex = 1;
-      for( FaceIter i = faces.begin(); i != faces.end(); i++ )
+      for( FaceCIter i = faces.begin(); i != faces.end(); i++ )
       {
          HalfEdgeIter he = i->he;
 
@@ -249,35 +246,7 @@ namespace tcods
          out << endl;
       }
 
-      map< int, int> depthFromSingularity;
-      set<int>n_rings_faces;
-      for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
-      {
-         if (vit->k == 0.0) continue;
-         HalfEdgeIter he = vit->out; // boundary conditions not checked
-         depthFromSingularity[vit->index] = 1;
-         queue<VertexIter>curqueue;
-         curqueue.push(vit);
-         while(!curqueue.empty())
-         {
-            vit = curqueue.front();
-            curqueue.pop();
-            he = vit->out->next;
-            VertexIter initialVertexIter = he->from;
-            do{
-               VertexIter curVertexIter = he->from;
-               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
-               {
-                  depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
-                  curqueue.push(curVertexIter);
-                  n_rings_faces.insert(faceIndex[he->face]);
-               }
-               he = he->next->flip->next;
-            }while(he->from != initialVertexIter);
-         }
-      }
-
-      for( FaceIter i = faces.begin(); i != faces.end(); i++ )
+      for( FaceCIter i = faces.begin(); i != faces.end(); i++ )
       {
          HalfEdgeIter he = i->he;
 
@@ -287,26 +256,15 @@ namespace tcods
             continue;
          }
 
-         if (n_rings_faces.count(faceIndex[i]) != 0 || mesh.n_rings == 0)
-         {
-            out << "#attrsf ";
+         out << "# attrs f " << faceIndex[ i ] << " ";
 
-            double alpha = i->alpha;
-            Vector w( cos(alpha), sin(alpha), 0. );
-            Vector u = i->toGlobal( w );
+         double alpha = i->alpha;
+         Vector w( cos(alpha), sin(alpha), 0. );
+         Vector u = i->toGlobal( w );
 
-            out << u.x << " " << u.y << " " << u.z;
+         out << u.x << " " << u.y << " " << u.z;
 
-            out << endl;
-         }
-         else
-         {
-            out << "#attrsf ";
-
-            out << 0.0 << " " << 0.0 << " " << 0.0;
-
-            out << endl;
-         }
+         out << endl;
       }
    }
 

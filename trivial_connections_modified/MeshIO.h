@@ -32,7 +32,7 @@ namespace tcods
          // write
          static void  writeOBJ( std::ostream& out, const Mesh& mesh ); // writes WavefrontOBJ
          static void writeOBJX( std::ostream& out, Mesh& mesh, int n_rings ); // writes WavefrontOBJ plus tangent vector per vertex
-         static void writeEOBJ( std::ostream& out, Mesh& mesh, int n_rings ); // writes WavefrontOBJ plus tangent vector per face
+         static void writeEOBJ( std::ostream& out, const Mesh& mesh ); // writes WavefrontOBJ plus tangent vector per face
 
          static void  writeJVX( std::ostream& out, const Mesh& mesh, const std::vector<int>& singularityIndices );
          // writes XML containing mesh data, plus pair of orthogonal tangent vector fields, singularity
