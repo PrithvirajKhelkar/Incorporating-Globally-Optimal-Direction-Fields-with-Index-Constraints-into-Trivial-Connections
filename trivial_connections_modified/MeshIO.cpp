@@ -138,8 +138,8 @@ namespace tcods
                }
                he = he->next->flip->next;
             }while(he->from != initialVertexIter);
-            depthFromSingularity.clear();
          }
+         depthFromSingularity.clear();
       }
 
       for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
