@@ -203,17 +203,17 @@ namespace tcods
       }
    }
 
-   void MeshIO :: writeEOBJ( ostream& out, const Mesh& mesh )
+   void MeshIO :: writeEOBJ( ostream& out, Mesh& mesh, int n_rings )
    {
       out.precision( 10 );
 
       int currentIndex = 1;
-      map< VertexCIter, int > vertexIndex;
-      map< FaceCIter, int > faceIndex;
-      const vector<Vertex>& vertices( mesh.vertices );
-      const vector<Face>& faces( mesh.faces );
+      map< VertexIter, int > vertexIndex;
+      map< FaceIter, int > faceIndex;
+      vector<Vertex>& vertices( mesh.vertices );
+      vector<Face>& faces( mesh.faces );
 
-      for( VertexCIter i = vertices.begin(); i != vertices.end(); i++ )
+      for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
       {
          out << "v " << i->position[0] << " "
                      << i->position[1] << " "
@@ -224,7 +224,7 @@ namespace tcods
       }
 
       currentIndex = 1;
-      for( FaceCIter i = faces.begin(); i != faces.end(); i++ )
+      for( FaceIter i = faces.begin(); i != faces.end(); i++ )
       {
          HalfEdgeIter he = i->he;
 
@@ -249,7 +249,35 @@ namespace tcods
          out << endl;
       }
 
-      for( FaceCIter i = faces.begin(); i != faces.end(); i++ )
+      map< int, int> depthFromSingularity;
+      set<int>n_rings_faces;
+      for( VertexIter vit = vertices.begin(); vit != vertices.end(); vit++ )
+      {
+         if (vit->k == 0.0) continue;
+         HalfEdgeIter he = vit->out; // boundary conditions not checked
+         depthFromSingularity[vit->index] = 1;
+         queue<VertexIter>curqueue;
+         curqueue.push(vit);
+         while(!curqueue.empty())
+         {
+            vit = curqueue.front();
+            curqueue.pop();
+            he = vit->out->next;
+            VertexIter initialVertexIter = he->from;
+            do{
+               VertexIter curVertexIter = he->from;
+               if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
+               {
+                  depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
+                  curqueue.push(curVertexIter);
+                  n_rings_faces.insert(faceIndex[he->face]);
+               }
+               he = he->next->flip->next;
+            }while(he->from != initialVertexIter);
+         }
+      }
+
+      for( FaceIter i = faces.begin(); i != faces.end(); i++ )
       {
          HalfEdgeIter he = i->he;
 
@@ -259,15 +287,26 @@ namespace tcods
             continue;
          }
 
-         out << "# attrs f " << faceIndex[ i ] << " ";
+         if (n_rings_faces.count(faceIndex[i]) != 0 || mesh.n_rings == 0)
+         {
+            out << "#attrsf ";
 
-         double alpha = i->alpha;
-         Vector w( cos(alpha), sin(alpha), 0. );
-         Vector u = i->toGlobal( w );
+            double alpha = i->alpha;
+            Vector w( cos(alpha), sin(alpha), 0. );
+            Vector u = i->toGlobal( w );
 
-         out << u.x << " " << u.y << " " << u.z;
+            out << u.x << " " << u.y << " " << u.z;
 
-         out << endl;
+            out << endl;
+         }
+         else
+         {
+            out << "#attrsf ";
+
+            out << 0.0 << " " << 0.0 << " " << 0.0;
+
+            out << endl;
+         }
       }
    }
 
