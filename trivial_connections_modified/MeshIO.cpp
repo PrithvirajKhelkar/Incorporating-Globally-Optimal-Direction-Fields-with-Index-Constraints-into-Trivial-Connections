@@ -131,6 +131,7 @@ namespace tcods
                if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
                {
                   depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
+                  std::cout << curVertexIter->index << ' ' << depthFromSingularity[curVertexIter->index] << std::endl;
                   curqueue.push(curVertexIter);
                   if (n_rings_vertices.count(curVertexIter->index) == 0)
                      n_rings_vertices.insert(curVertexIter->index);
