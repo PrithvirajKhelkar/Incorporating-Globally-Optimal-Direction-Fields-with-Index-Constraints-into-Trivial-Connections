@@ -7,6 +7,7 @@
 #include "HalfEdge.h"
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -116,7 +117,7 @@ namespace tcods
       {
          if (vit->k == 0.0) continue;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
-         map< int, int> depthFromSingularity;
+         unordered_map< int, int> depthFromSingularity;
          depthFromSingularity[vit->index] = 1;
          queue<VertexIter>curqueue;
          curqueue.push(vit);
@@ -132,11 +133,13 @@ namespace tcods
                {
                   depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
                   curqueue.push(curVertexIter);
-                  n_rings_vertices.insert(curVertexIter->index);
+                  if (n_rings_vertices.count(curVertexIter->index) == 0)
+                     n_rings_vertices.insert(curVertexIter->index);
                }
                he = he->next->flip->next;
             }while(he->from != initialVertexIter);
          }
+
       }
 
       for( VertexIter i = vertices.begin(); i != vertices.end(); i++ )
