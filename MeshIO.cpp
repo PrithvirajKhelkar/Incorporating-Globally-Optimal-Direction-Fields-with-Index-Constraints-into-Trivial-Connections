@@ -259,15 +259,26 @@ namespace tcods
             continue;
          }
 
-         out << "# attrs f " << faceIndex[ i ] << " ";
+         if (n_rings_faces.count(faceIndex[i]) != 0 || mesh.n_rings == 0)
+         {
+            out << "#attrs f ";
 
-         double alpha = i->alpha;
-         Vector w( cos(alpha), sin(alpha), 0. );
-         Vector u = i->toGlobal( w );
+            double alpha = i->alpha;
+            Vector w( cos(alpha), sin(alpha), 0. );
+            Vector u = i->toGlobal( w );
 
-         out << u.x << " " << u.y << " " << u.z;
+            out << u.x << " " << u.y << " " << u.z;
 
-         out << endl;
+            out << endl;
+         }
+         else
+         {
+            out << "#attrs f ";
+
+            out << 0.0 << " " << 0.0 << " " << 0.0;
+
+            out << endl;
+         }
       }
    }
 
