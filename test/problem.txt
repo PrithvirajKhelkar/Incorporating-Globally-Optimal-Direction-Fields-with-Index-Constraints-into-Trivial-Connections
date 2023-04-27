@@ -1,5 +1,5 @@
 in test/bunny.obj
-out test/new_modified_solution.objx
+out test/all_solution.eobj
 vertex 7094 -0.5
 vertex 9279 -0.5
 vertex 11275 1.5
