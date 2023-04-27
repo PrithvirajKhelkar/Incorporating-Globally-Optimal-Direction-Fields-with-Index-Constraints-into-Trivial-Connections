@@ -188,10 +188,11 @@ namespace tcods
 
    Vector Face :: toGlobal( Vector q ) const
    {
-      Vector origin = he->from->position;
+      // Vector origin = he->from->position;
       Vector e1, e2; frame( e1, e2 );
 
-      return origin + q.x*e1 + q.y*e2;
+      // return origin + q.x*e1 + q.y*e2;
+      return q.x*e1 + q.y*e2;
    }
 
    bool Face :: isBoundary( void ) const
