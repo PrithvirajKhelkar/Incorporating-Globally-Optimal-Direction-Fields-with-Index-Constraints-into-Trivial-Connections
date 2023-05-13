@@ -189,6 +189,7 @@ namespace tcods
    Vector Face :: toGlobal( Vector q ) const
    {
       // Vector origin = he->from->position;
+      // removed origin from the calculation because the outputs aren't being on the faces
       Vector e1, e2; frame( e1, e2 );
 
       // return origin + q.x*e1 + q.y*e2;

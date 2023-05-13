@@ -249,15 +249,16 @@ namespace tcods
          out << endl;
       }
 
-      map< int, int> depthFromSingularity;
-      set<int>n_rings_vertices;
+      // Doing a Breadth First Search to find the n_rings
+      map< int, int> depthFromSingularity; // This is used to get the depth of the vertex from the singularities
+      set<int>n_rings_vertices; // These are the set of vertices which are in out category
       for( VertexIter vit_orig = vertices.begin(); vit_orig != vertices.end(); vit_orig++ )
       {
          if (vit_orig->k == 0.0) continue;
          VertexIter vit = vit_orig;
          HalfEdgeIter he = vit->out; // boundary conditions not checked
          depthFromSingularity[vit->index] = 1;
-         queue<VertexIter>curqueue;
+         queue<VertexIter>curqueue; // the queue used to do the depth first search
          curqueue.push(vit);
          while(!curqueue.empty())
          {
@@ -265,12 +266,16 @@ namespace tcods
             curqueue.pop();
             he = vit->out->next;
             VertexIter initialVertexIter = he->from;
+            // Go over all the neighbours of the current vertex to see if it should be added into our set or not
             do{
                VertexIter curVertexIter = he->from;
+               // Add the vertex into queue only if it's not visited before (checked using depthFromSingularity is assigned or not)
+               // And if the depth or distane of that vertex from the singulariy is less than the n_rings specified
                if (depthFromSingularity[curVertexIter->index] == 0 && depthFromSingularity[vit->index] <= mesh.n_rings)
                {
-                  depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1;
+                  depthFromSingularity[curVertexIter->index] = depthFromSingularity[vit->index]+1; // Updating the depth
                   curqueue.push(curVertexIter);
+                  // Adding it into the set because it falls into our category
                   if (n_rings_vertices.count(curVertexIter->index) == 0)
                      n_rings_vertices.insert(curVertexIter->index);
                }
@@ -293,6 +298,8 @@ namespace tcods
          VertexIter vit1 = i->he->from;
          VertexIter vit2 = i->he->next->from;
          VertexIter vit3 = i->he->next->next->from;
+         // Output the facevector only when one of the vertices on the face is n_rings away from the singularity
+         // else output a 0 vector
          if (n_rings_vertices.count(vit1->index) != 0 ||
              n_rings_vertices.count(vit2->index) != 0 ||
              n_rings_vertices.count(vit3->index) != 0 || mesh.n_rings == 0)
